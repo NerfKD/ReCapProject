@@ -1,0 +1,14 @@
+RDBMS - Relational Databases Managament System
+Oracle, SqlServer, MySql, PostgreSql, Access
+ANSI SQL standartı 
+ANSI SQL extentions : PLSql-Oracle, T-Sql-SqlServer 
+Normalisation standartı.
+
+NoSql - Not Only SQL
+MongoDB, Firebase
+Loglama altyapılarında çok kullanılır.
+
+Overdesign - Aşırı tasarım.
+
+
+DTO - Data Transformation object

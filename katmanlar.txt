@@ -1,0 +1,45 @@
+*DB - Database
+-SQL, Oracle
+
+Katmanlar
+
+Abstract Klasörü
+-Soyutlar
+-Referans tutucular
+-Interface, abstract vs.
+
+Concrete Klasörü
+-Somutlar
+-Member, Product vs.
+
+*Data Access - Veri Erişim; 
+-Veri katmanlara bölünür çünkü erişim için farklı teknikler vardır.
+-Sadece Sql komutları bulunur.
+-Örnek: Tedarikçinin toplam girdiği ürünleri getir.
+-Örnek: Kurallardan geçerse ekler.
+-Örnek: Ekledim diyerek geri döner.
+
+*Business - İş Katmanı;
+-Kurallar yazılır
+-İş kodları yazılır
+-If vb.
+-Örnek: Yeni bir tedarikçi kayıt olduktan sonra max. 10 ürün koyabilir.
+-Örnek: DA üzerinden kuraldan geçtiğini öğrenirsek ekleme komutu veririz.
+-Örnek: UI'ye eklendiğini bildirir.
+
+*Application Proggamming Interface(API) - Uygulama Programlama Arayüzü
+-Android, IOS gibi ortamları sisteme bağlamamızı sağlar.
+-Restful mimarisi(format - JSON)
+-Eski versiyonu (SOAP)
+
+
+*User Interface(UI) - Kullanıcı Arayüz
+-Asp.Net(WebForm,MVC)
+-Arayüz, kullanıcı etkileşimi.
+-Örnek: Ürün ekleme yapılmaya çalışılır, business a bilgi verir.
+-Örnek: Business dönüşü ile ekranda eklendiğini gösterir.
+
+
+Yazılım
+PnP tekniği - tak ve çalıştır.
+ile yazılmalıdır.
