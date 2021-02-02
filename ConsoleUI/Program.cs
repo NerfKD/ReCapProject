@@ -1,6 +1,7 @@
 ﻿using Business.Concrete;
 using DataAccess.Concrete.InMemory;
 using Entities.Concrete;
+using Entities.DTO;
 using System;
 using System.Collections.Generic;
 
@@ -102,6 +103,14 @@ namespace ConsoleUI
             foreach (Color item in colorList)
             {
                 Console.WriteLine("ID: " + item.ColorId + " // Marka Adı: " + item.ColorName);
+            }
+
+            Console.WriteLine("--------Tüm listeyi çağırma (LINQ - JOIN)--------");
+            CarDTOManager carDTOManager = new CarDTOManager(new InMemoryBrandDal(), new InMemoryCarDal(), new InMemoryColorDal());
+            List<CarDTO> carDTOs = carDTOManager.GetAll();
+            foreach (CarDTO item in carDTOs)
+            {
+                Console.WriteLine("ID: " + item.Id + " // Marka: " + item.BrandName + " // Renk: " + item.ColorName + " // Fiyat: " + item.DailyPrice + " // Model: " + item.ModelYear + " // Açıklama: " + item.Description);
             }
 
         }
