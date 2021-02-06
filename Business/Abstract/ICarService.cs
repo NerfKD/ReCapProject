@@ -7,5 +7,7 @@ namespace Business.Abstract
 {
     public interface ICarService : IBaseService <Car>
     {
+        List<Car> GetCarsByBrandId(int Id);
+        List<Car> GetCarsByColorId(int Id);
     }
 }

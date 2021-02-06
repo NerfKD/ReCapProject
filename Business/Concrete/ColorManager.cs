@@ -60,9 +60,9 @@ namespace Business.Concrete
                 Console.WriteLine(item.ColorId + " numaralı renk güncellenemedi.");
             }
         }
-        public Color GetById(int itemId)
+        public List<Color> GetById(int itemId)
         {
-            return _iColorDal.GetById(itemId);
+            return _iColorDal.GetAll(p=> p.ColorId == itemId);
         }
 
         public List<Color> GetAll()
@@ -70,5 +70,9 @@ namespace Business.Concrete
             return _iColorDal.GetAll();
         }
 
+        List<Color> IBaseService<Color>.GetById(int Id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

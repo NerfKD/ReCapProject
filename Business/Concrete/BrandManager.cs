@@ -15,7 +15,7 @@ namespace Business.Concrete
         public BrandManager(IBrandDal brandDal)
         {
             _iBrandDal = brandDal;
-            _brands = _iBrandDal.GetAll();
+            _brands = _iBrandDal.GetAll(null);
         }
 
         public void Add(Brand item)
@@ -57,17 +57,15 @@ namespace Business.Concrete
                 Console.WriteLine(item.BrandId + " numaralı marka güncellemenedi.");
             }
         }
-        public Brand GetById(int itemId)
+        public List<Brand> GetById(int itemId)
         {
-            return _iBrandDal.GetById(itemId);
+            return _iBrandDal.GetAll(p => p.BrandId == itemId);
         }
         public List<Brand> GetAll()
         {
+
             return _iBrandDal.GetAll();
         }
-
-
-
 
     }
 }

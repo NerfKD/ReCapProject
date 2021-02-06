@@ -12,27 +12,22 @@ namespace Business.Concrete
     public class CarManager : ICarService
     {
         ICarDal _iCarDal;
-        IBrandDal _iBrandDal;
-        List<Brand> _brands;
         List<Car> _cars;
 
-        public CarManager(ICarDal iCarDal, IBrandDal ibrandDal)
+        public CarManager(ICarDal iCarDal)
         {
             _iCarDal = iCarDal;
-            _iBrandDal = ibrandDal;
-            _brands = _iBrandDal.GetAll();
             _cars = iCarDal.GetAll();
         }
 
         public void Add(Car item)
         {
 
-            if (item.Description != null && item.BrandId != 0)
+            if (item.Description.Length > 2 && item.Description != null && item.DailyPrice > 0)
             {
-                string brandI = _brands.FirstOrDefault(p => p.BrandId == item.BrandId).BrandName;
 
                 _iCarDal.Add(item);
-                Console.WriteLine(brandI + " marka " + item.Id + " numaralı araç eklendi.");
+                Console.WriteLine(item.Id + " numaralı araç eklendi.");
             }
             else
             {
@@ -66,9 +61,9 @@ namespace Business.Concrete
                 Console.WriteLine(item.Id + " numaralı araç güncellenemedi.");
             }
         }
-        public Car GetById(int itemId)
+        public List<Car> GetById(int itemId)
         {
-            return _iCarDal.GetById(itemId);
+            return _iCarDal.GetAll(p=> p.Id == itemId);
         }
 
         public List<Car> GetAll()
@@ -76,5 +71,14 @@ namespace Business.Concrete
             return _iCarDal.GetAll();
         }
 
+        public List<Car> GetCarsByBrandId(int Id)
+        {
+            return _iCarDal.GetAll(p => p.BrandId == Id);
+        }
+
+        public List<Car> GetCarsByColorId(int Id)
+        {
+            return _iCarDal.GetAll(p => p.ColorId == Id);
+        }
     }
 }
