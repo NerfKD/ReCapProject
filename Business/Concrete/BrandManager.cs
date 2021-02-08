@@ -10,62 +10,39 @@ namespace Business.Concrete
 {
     public class BrandManager : IBrandService
     {
-        IBrandDal _iBrandDal;
-        List<Brand> _brands;
+        IBrandDal _brandDal;
+       
         public BrandManager(IBrandDal brandDal)
         {
-            _iBrandDal = brandDal;
-            _brands = _iBrandDal.GetAll(null);
+            _brandDal = brandDal;
         }
 
-        public void Add(Brand item)
+        public void Add(Brand entity)
         {
-            if (item.BrandName != null)
-            {
-                _iBrandDal.Add(item);
-                Console.WriteLine(item.BrandId + " numaralı marka eklendi.");
-            }
-            else
-            {
-                Console.WriteLine(item.BrandId + " numaralı marka eklenemedi.");
-            }
+            _brandDal.Add(entity);
+            Console.WriteLine(entity.BrandId + " numaralı marka eklendi.");
         }
 
-        public void Delete(Brand item)
+        public void Delete(Brand entity)
         {
-            bool sonuc = _brands.Where(p => p.BrandId == item.BrandId).Any();
-            if (sonuc && item.BrandName != null)
-            {
-                _iBrandDal.Delete(item);
-                Console.WriteLine(item.BrandId + " numaralı marka silindi.");
-            }
-            else
-            {
-                Console.WriteLine(item.BrandId + " numaralı marka silinemedi.");
-            }
+            _brandDal.Delete(entity);
+            Console.WriteLine(entity.BrandId + " numaralı marka silindi.");
         }
-        public void Update(Brand item)
-        {
-            bool sonuc = _brands.Where(p => p.BrandId == item.BrandId).Any();
-            if (sonuc && item.BrandName != null)
-            {
-                _iBrandDal.Add(item);
-                Console.WriteLine(item.BrandId + " numaralı marka güncellendi.");
-            }
-            else
-            {
-                Console.WriteLine(item.BrandId + " numaralı marka güncellemenedi.");
-            }
-        }
-        public List<Brand> GetById(int itemId)
-        {
-            return _iBrandDal.GetAll(p => p.BrandId == itemId);
-        }
+
         public List<Brand> GetAll()
         {
-
-            return _iBrandDal.GetAll();
+            return _brandDal.GetAll();
         }
 
+        public Brand GetById(int Id)
+        {
+            return _brandDal.Get(p => p.BrandId == Id);
+        }
+
+        public void Update(Brand entity)
+        {
+            _brandDal.Update(entity);
+            Console.WriteLine(entity.BrandId + " numaralı marka güncellendi.");
+        }
     }
 }

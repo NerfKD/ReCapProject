@@ -10,69 +10,39 @@ namespace Business.Concrete
 {
     public class ColorManager : IColorService
     {
-        IColorDal _iColorDal;
-        List<Color> _colors;
+        IColorDal _colorDal;
 
-        public ColorManager(IColorDal iColorDal)
+        public ColorManager(IColorDal colorDal)
         {
-            _iColorDal = iColorDal;
-            _colors = _iColorDal.GetAll();
+            _colorDal = colorDal;
         }
 
-        public void Add(Color item)
+        public void Add(Color entity)
         {
-            if (item.ColorName != null)
-            {
-                _iColorDal.Add(item);
-                Console.WriteLine(item.ColorId + " numaralı renk eklendi.");
-            }
-            else
-            {
-                Console.WriteLine(item.ColorId + " numaralı renk eklenemedi.");
-            }
+            _colorDal.Add(entity);
+            Console.WriteLine(entity.ColorId + " numaralı renk eklendi.");
         }
 
-        public void Delete(Color item)
+        public void Delete(Color entity)
         {
-            bool sonuc = _colors.Where(p => p.ColorId == item.ColorId).Any();
-            if (sonuc && item.ColorName != null)
-            {
-                _iColorDal.Delete(item);
-                Console.WriteLine(item.ColorId + " numaralı renk silindi.");
-            }
-            else
-            {
-                Console.WriteLine(item.ColorId + " numaralı renk silinemedi.");
-            }
-        }
-
-
-        public void Update(Color item)
-        {
-            bool sonuc = _colors.Where(p => p.ColorId == item.ColorId).Any();
-            if (sonuc && item.ColorName != null)
-            {
-                _iColorDal.Update(item);
-                Console.WriteLine(item.ColorId + " numaralı renk güncellendi.");
-            }
-            else
-            {
-                Console.WriteLine(item.ColorId + " numaralı renk güncellenemedi.");
-            }
-        }
-        public List<Color> GetById(int itemId)
-        {
-            return _iColorDal.GetAll(p=> p.ColorId == itemId);
+            _colorDal.Delete(entity);
+            Console.WriteLine(entity.ColorId + " numaralı renk silindi.");
         }
 
         public List<Color> GetAll()
         {
-            return _iColorDal.GetAll();
+            return _colorDal.GetAll();
         }
 
-        List<Color> IBaseService<Color>.GetById(int Id)
+        public Color GetById(int Id)
         {
-            throw new NotImplementedException();
+            return _colorDal.Get(p => p.ColorId == Id);
+        }
+
+        public void Update(Color entity)
+        {
+            _colorDal.Update(entity);
+            Console.WriteLine(entity.ColorId + " numaralı renk güncellendi.");
         }
     }
 }

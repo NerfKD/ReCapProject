@@ -1,5 +1,7 @@
-﻿using DataAccess.Abstract;
+﻿using Core.DataAccess.EntityFramework;
+using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTO;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,55 +11,20 @@ using System.Text;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EfCarDal : ICarDal
+    public class EfCarDal : EfEntityRepositoryBase<Car, CBCContext>, ICarDal
     {
-        public void Add(Car item)
+        public List<CarDto> GetCars()
         {
-            using (CBCContext context = new CBCContext())
-            {
-                var addedEntity = context.Entry(item);
-                addedEntity.State = EntityState.Added;
-                context.SaveChanges();
-            }
-        }
 
-        public void Delete(Car item)
-        {
             using (CBCContext context = new CBCContext())
             {
-                var deletedEntity = context.Entry(item);
-                deletedEntity.State = EntityState.Deleted;
-                context.SaveChanges();
-            }
-        }
-
-        public Car Get(Expression<Func<Car, bool>> filter)
-        {
-            using (CBCContext context = new CBCContext())
-            {
-                return context.Set<Car>().SingleOrDefault(filter);
-            }
-        }
-
-        public List<Car> GetAll(Expression<Func<Car, bool>> filter)
-        {
-            using (CBCContext context = new CBCContext())
-            {
-                return filter == null
-                    ? context.Set<Car>().ToList()
-                    : context.Set<Car>().Where(filter).ToList();
+                var result = from ca in context.Cars
+                             join br in context.Brands on ca.BrandId equals br.BrandId
+                             join co in context.Colors on ca.ColorId equals co.ColorId
+                             select new CarDto { Id = ca.Id, BrandName = br.BrandName, ColorName = co.ColorName, DailyPrice = ca.DailyPrice};
+                return result.ToList();
             }
             
-        }
-
-        public void Update(Car item)
-        {
-            using (CBCContext context = new CBCContext())
-            {
-                var updatedEntity = context.Entry(item);
-                updatedEntity.State = EntityState.Modified;
-                context.SaveChanges();
-            }
         }
     }
 }

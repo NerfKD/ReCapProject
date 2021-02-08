@@ -2,6 +2,7 @@
 using DataAccess.Abstract;
 using DataAccess.Concrete.InMemory;
 using Entities.Concrete;
+using Entities.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,74 +12,57 @@ namespace Business.Concrete
 {
     public class CarManager : ICarService
     {
-        ICarDal _iCarDal;
-        List<Car> _cars;
+        ICarDal _carDal;
 
-        public CarManager(ICarDal iCarDal)
+        public CarManager(ICarDal carDal)
         {
-            _iCarDal = iCarDal;
-            _cars = iCarDal.GetAll();
+            _carDal = carDal;
         }
 
-        public void Add(Car item)
+        public void Add(Car entity)
         {
-
-            if (item.Description.Length > 2 && item.Description != null && item.DailyPrice > 0)
-            {
-
-                _iCarDal.Add(item);
-                Console.WriteLine(item.Id + " numaralı araç eklendi.");
-            }
-            else
-            {
-                Console.WriteLine(item.Id + " numaralı araç eklenemedi.");
-            }
+            _carDal.Add(entity);
+            Console.WriteLine(entity.Id + " numaralı araç eklendi.");
+           
         }
 
-        public void Delete(Car item)
+        public void Delete(Car entity)
         {
-            bool sonuc = _cars.Where(p => p.Id == item.Id).Any();
-            if (item.Description != null && item.BrandId != 0 && sonuc)
-            {
-                _iCarDal.Delete(item);
-                Console.WriteLine(item.Id + " numaralı araç silindi.");
-            }
-            else
-            {
-                Console.WriteLine(item.Id + " numaralı araç silinemedi.");
-            }
+
+            _carDal.Delete(entity);
+            Console.WriteLine(entity.Id + " numaralı araç silindi.");
+           
         }
-        public void Update(Car item)
+        public void Update(Car entity)
         {
-            bool sonuc = _cars.Where(p => p.Id == item.Id).Any();
-            if (item.Description != null && item.BrandId != 0 && sonuc)
-            {
-                _iCarDal.Update(item);
-                Console.WriteLine(item.Id + " numaralı araç güncellendi.");
-            }
-            else
-            {
-                Console.WriteLine(item.Id + " numaralı araç güncellenemedi.");
-            }
+
+            _carDal.Update(entity);
+            Console.WriteLine(entity.Id + " numaralı araç güncellendi.");
+
         }
-        public List<Car> GetById(int itemId)
+        public Car GetById(int Id)
         {
-            return _iCarDal.GetAll(p=> p.Id == itemId);
+            return _carDal.Get(p=> p.Id == Id);
         }
 
         public List<Car> GetAll()
         {
-            return _iCarDal.GetAll();
+            return _carDal.GetAll();
         }
 
         public List<Car> GetCarsByBrandId(int Id)
         {
-            return _iCarDal.GetAll(p => p.BrandId == Id);
+            return _carDal.GetAll(p => p.BrandId == Id);
         }
 
         public List<Car> GetCarsByColorId(int Id)
         {
-            return _iCarDal.GetAll(p => p.ColorId == Id);
+            return _carDal.GetAll(p => p.ColorId == Id);
+        }
+
+        public List<CarDto> GetCars()
+        {
+            return _carDal.GetCars();
         }
     }
 }
