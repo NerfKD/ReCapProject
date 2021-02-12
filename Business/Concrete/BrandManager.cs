@@ -1,4 +1,7 @@
 ﻿using Business.Abstract;
+using Business.Constants;
+using Core.Utilities.Results.Abstract;
+using Core.Utilities.Results.Concrete;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
@@ -11,38 +14,73 @@ namespace Business.Concrete
     public class BrandManager : IBrandService
     {
         IBrandDal _brandDal;
-       
+
         public BrandManager(IBrandDal brandDal)
         {
             _brandDal = brandDal;
         }
 
-        public void Add(Brand entity)
+        public IResult Add(Brand entity)
         {
-            _brandDal.Add(entity);
-            Console.WriteLine(entity.BrandId + " numaralı marka eklendi.");
+            if (DateTime.Now.Hour == Maintenance.Hour)
+            {
+                return new ErrorResult(Messages.OperationFailed);
+            }
+            else
+            {
+                _brandDal.Add(entity);
+                return new SuccessResult(Messages.BrandAdded);
+            }
         }
 
-        public void Delete(Brand entity)
+        public IResult Delete(Brand entity)
         {
-            _brandDal.Delete(entity);
-            Console.WriteLine(entity.BrandId + " numaralı marka silindi.");
+            if (DateTime.Now.Hour == Maintenance.Hour)
+            {
+                return new ErrorResult(Messages.OperationFailed);
+            }
+            else
+            {
+                _brandDal.Delete(entity);
+                return new SuccessResult(Messages.BrandDeleted);
+            }
         }
 
-        public List<Brand> GetAll()
+        public IDataResult<List<Brand>> GetAll()
         {
-            return _brandDal.GetAll();
+            if (DateTime.Now.Hour == Maintenance.Hour)
+            {
+                return new ErrorDataResult<List<Brand>>(Messages.OperationFailed);
+            }
+            else
+            {
+                return new SuccessDataResult<List<Brand>>(_brandDal.GetAll(), Messages.BrandsListed);
+            }
         }
 
-        public Brand GetById(int Id)
+        public IDataResult<Brand> GetById(int Id)
         {
-            return _brandDal.Get(p => p.BrandId == Id);
+            if (DateTime.Now.Hour == Maintenance.Hour)
+            {
+                return new ErrorDataResult<Brand>(Messages.OperationFailed);
+            }
+            else
+            {
+                return new SuccessDataResult<Brand>(_brandDal.Get(p => p.BrandId == Id), Messages.BrandListed);
+            }
         }
 
-        public void Update(Brand entity)
+        public IResult Update(Brand entity)
         {
-            _brandDal.Update(entity);
-            Console.WriteLine(entity.BrandId + " numaralı marka güncellendi.");
+            if (DateTime.Now.Hour == Maintenance.Hour)
+            {
+                return new ErrorResult(Messages.OperationFailed);
+            }
+            else
+            {
+                _brandDal.Update(entity);
+                return new SuccessResult(Messages.BrandUpdated);
+            }
         }
     }
 }

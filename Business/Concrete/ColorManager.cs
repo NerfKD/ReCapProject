@@ -1,4 +1,7 @@
 ﻿using Business.Abstract;
+using Business.Constants;
+using Core.Utilities.Results.Abstract;
+using Core.Utilities.Results.Concrete;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
@@ -17,32 +20,67 @@ namespace Business.Concrete
             _colorDal = colorDal;
         }
 
-        public void Add(Color entity)
+        public IResult Add(Color entity)
         {
-            _colorDal.Add(entity);
-            Console.WriteLine(entity.ColorId + " numaralı renk eklendi.");
+            if (DateTime.Now.Hour == Maintenance.Hour)
+            {
+                return new ErrorResult(Messages.OperationFailed);
+            }
+            else
+            {
+                _colorDal.Add(entity);
+                return new SuccessResult(Messages.ColorAdded);
+            }
         }
 
-        public void Delete(Color entity)
+        public IResult Delete(Color entity)
         {
-            _colorDal.Delete(entity);
-            Console.WriteLine(entity.ColorId + " numaralı renk silindi.");
+            if (DateTime.Now.Hour == Maintenance.Hour)
+            {
+                return new ErrorResult(Messages.OperationFailed);
+            }
+            else
+            {
+                _colorDal.Delete(entity);
+                return new SuccessResult(Messages.ColorDeleted);
+            }
         }
 
-        public List<Color> GetAll()
+        public IDataResult<List<Color>> GetAll()
         {
-            return _colorDal.GetAll();
+            if (DateTime.Now.Hour == Maintenance.Hour)
+            {
+                return new ErrorDataResult<List<Color>>(Messages.OperationFailed);
+            }
+            else
+            {
+                return new SuccessDataResult<List<Color>>(_colorDal.GetAll(),Messages.BrandsListed);
+            }
         }
 
-        public Color GetById(int Id)
+        public IDataResult<Color> GetById(int Id)
         {
-            return _colorDal.Get(p => p.ColorId == Id);
+            if (DateTime.Now.Hour == Maintenance.Hour)
+            {
+                return new ErrorDataResult<Color>(Messages.OperationFailed);
+            }
+            else
+            {
+                return new SuccessDataResult<Color>(_colorDal.Get(p => p.ColorId == Id),Messages.ColorsListed);
+            }
         }
 
-        public void Update(Color entity)
+        public IResult Update(Color entity)
         {
-            _colorDal.Update(entity);
-            Console.WriteLine(entity.ColorId + " numaralı renk güncellendi.");
+            if (DateTime.Now.Hour == Maintenance.Hour)
+            {
+                return new ErrorResult(Messages.OperationFailed);
+            }
+            else
+            {
+                _colorDal.Update(entity);
+                return new SuccessResult(Messages.ColorUpdated);
+            }
         }
     }
 }

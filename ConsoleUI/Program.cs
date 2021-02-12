@@ -19,30 +19,61 @@ namespace ConsoleUI
 
         private static void ColorTest()
         {
+
             ColorManager colorManager = new ColorManager(new EfColorDal());
 
             Console.WriteLine("--------Color Add--------");
-            colorManager.Add(new Color { ColorName = "Red" });
-            colorManager.Add(new Color { ColorName = "Grenn" });
-            colorManager.Add(new Color { ColorName = "Blue" });
+            var cOpe = colorManager.Add(new Color { ColorName = "Black" });
+            Console.WriteLine(cOpe.Message);
+
             Console.WriteLine("--------GelAll After Add-------");
-            foreach (var color in colorManager.GetAll())
+            var cList = colorManager.GetAll();
+            if (cList.Success)
             {
-                Console.WriteLine("ID: " + color.ColorId + " // ColorName: " + color.ColorName);
+                foreach (var color in cList.Data)
+                {
+                    Console.WriteLine("ID: " + color.ColorId + " // ColorName: " + color.ColorName);
+                }
+                Console.WriteLine(cList.Message);
             }
-            Console.WriteLine("--------Color Delete--------");
-            colorManager.Delete(new Color { ColorId = 4, ColorName = "Blue" });
-            Console.WriteLine("--------GelAll After Delete--------");
-            foreach (var color in colorManager.GetAll())
+            else
             {
-                Console.WriteLine("ID: " + color.ColorId + " // ColorName: " + color.ColorName);
+                Console.WriteLine(cList.Message);
             }
+
+            //Console.WriteLine("--------Color Delete--------");
+            //var cOpe2 = colorManager.Delete(new Color { ColorId = 4, ColorName = "Blue" });
+            //Console.WriteLine(cOpe2.Message);
+
             Console.WriteLine("--------Color Update--------");
-            colorManager.Update(new Color { ColorId = 3, ColorName = "Blue" });
-            Console.WriteLine("--------GelAll After Update--------");
-            foreach (var color in colorManager.GetAll())
+            var cOpe3 = colorManager.Update(new Color { ColorId = 3, ColorName = "Blue" });
+            Console.WriteLine(cOpe3.Message);
+
+            Console.WriteLine("--------GelAll After Delete and Update-------");
+            var cList2 = colorManager.GetAll();
+            if (cList2.Success)
             {
-                Console.WriteLine("ID: " + color.ColorId + " // ColorName: " + color.ColorName);
+                foreach (var color in cList2.Data)
+                {
+                    Console.WriteLine("ID: " + color.ColorId + " // ColorName: " + color.ColorName);
+                }
+                Console.WriteLine(cList2.Message);
+            }
+            else
+            {
+                Console.WriteLine(cList2.Message);
+            }
+
+            Console.WriteLine("--------GelById-------");
+            var cList3 = colorManager.GetById(3);
+            if (cList3.Success)
+            {
+                Console.WriteLine(cList3.Data.ColorId + " // " + cList3.Data.ColorName);
+                Console.WriteLine(cList3.Message);
+            }
+            else
+            {
+                Console.WriteLine(cList3.Message);
             }
         }
 
@@ -51,28 +82,59 @@ namespace ConsoleUI
             BrandManager brandManager = new BrandManager(new EfBrandDal());
 
             Console.WriteLine("--------Brand Add--------");
-            brandManager.Add(new Brand { BrandName = "BMW" });
-            brandManager.Add(new Brand { BrandName = "Opel" });
-            brandManager.Add(new Brand { BrandName = "Mercedes" });
+            var bOpe = brandManager.Add(new Brand { BrandName = "Nissan" });
+            Console.WriteLine(bOpe.Message);
+
             Console.WriteLine("--------GelAll After Add-------");
-            foreach (var brand in brandManager.GetAll())
+            var bList = brandManager.GetAll();
+            if (bList.Success)
             {
-                Console.WriteLine("ID: " + brand.BrandId + " // BrandName: " + brand.BrandName);
+                foreach (var brand in bList.Data)
+                {
+                    Console.WriteLine("ID: " + brand.BrandId + " // BrandName: " + brand.BrandName);
+                }
+                Console.WriteLine(bList.Message);
             }
-            Console.WriteLine("--------Brand Delete--------");
-            brandManager.Delete(new Brand { BrandId = 15, BrandName = "Mercedes" });
-            Console.WriteLine("--------GelAll After Delete--------");
-            foreach (var brand in brandManager.GetAll())
+            else
             {
-                Console.WriteLine("ID: " + brand.BrandId + " // BrandName: " + brand.BrandName);
+                Console.WriteLine(bList.Message);
             }
+            
+            //Console.WriteLine("--------Brand Delete--------");
+            //var bOpe2 = brandManager.Delete(new Brand { BrandId = 15, BrandName = "Mercedes" });
+            //Console.WriteLine(bOpe2.Message);
+
             Console.WriteLine("--------Brand Update--------");
-            brandManager.Update(new Brand { BrandId = 14, BrandName = "Mercedes" });
-            Console.WriteLine("--------GelAll After Update--------");
-            foreach (var brand in brandManager.GetAll())
+            var bOpe3 = brandManager.Update(new Brand { BrandId = 14, BrandName = "Mercedes" });
+            Console.WriteLine(bOpe3.Message);
+
+            Console.WriteLine("--------GelAll After Update and Delete--------");
+            var bList2 = brandManager.GetAll();
+            if (bList2.Success)
             {
-                Console.WriteLine("ID: " + brand.BrandId + " // BrandName: " + brand.BrandName);
+                foreach (var brand in bList2.Data)
+                {
+                    Console.WriteLine("ID: " + brand.BrandId + " // BrandName: " + brand.BrandName);
+                }
+                Console.WriteLine(bList2.Message);
             }
+            else
+            {
+                Console.WriteLine(bList2.Message);
+            }
+
+            Console.WriteLine("--------GelById-------");
+            var bList3 = brandManager.GetById(13);
+            if (bList3.Success)
+            {
+                Console.WriteLine(bList3.Data.BrandId + " // " + bList3.Data.BrandName);
+                Console.WriteLine(bList3.Message);
+            }
+            else
+            {
+                Console.WriteLine(bList3.Message);
+            }
+
         }
 
         private static void CarTest()
@@ -80,42 +142,102 @@ namespace ConsoleUI
             CarManager carManager = new CarManager(new EfCarDal());
 
             Console.WriteLine("--------Car Add--------");
-            carManager.Add(new Car { BrandId = 13, ColorId = 3, DailyPrice = 320000, Description = "FFF", ModelYear = 2019 });
-            carManager.Add(new Car { BrandId = 14, ColorId = 2, DailyPrice = 32000, Description = "FFF2", ModelYear = 2020 });
-            carManager.Add(new Car { BrandId = 14, ColorId = 2, DailyPrice = 350000, Description = "FFF3", ModelYear = 2021 });
+            var caOpe = carManager.Add(new Car { BrandId = 13, ColorId = 3, DailyPrice = 22000, Description = "FUU", ModelYear = 2005 });
+            Console.WriteLine(caOpe.Message);
+
             Console.WriteLine("--------GelAll After Add-------");
-            foreach (var car in carManager.GetAll())
+            var caList = carManager.GetAll();
+            if (caList.Success)
             {
-                Console.WriteLine("ID: " + car.Id + " // MarkaId: " + car.BrandId + " // RenkId: " + car.ColorId + " // Fiyat: " + car.DailyPrice + " // Model: " + car.ModelYear + " // Açıklama: " + car.Description);
+                foreach (var car in caList.Data)
+                {
+                    Console.WriteLine("ID: " + car.Id + " // MarkaId: " + car.BrandId + " // RenkId: " + car.ColorId + " // Fiyat: " + car.DailyPrice + " // Model: " + car.ModelYear + " // Açıklama: " + car.Description);
+                }
+                Console.WriteLine(caList.Message);
             }
-            Console.WriteLine("--------Car Delete--------");
-            carManager.Delete(new Car { Id = 1008, BrandId = 14, ColorId = 2, DailyPrice = 350000, Description = "FFF3", ModelYear = 2021 });
-            Console.WriteLine("--------GelAll After Delete--------");
-            foreach (var car in carManager.GetAll())
+            else
             {
-                Console.WriteLine("ID: " + car.Id + " // MarkaId: " + car.BrandId + " // RenkId: " + car.ColorId + " // Fiyat: " + car.DailyPrice + " // Model: " + car.ModelYear + " // Açıklama: " + car.Description);
+                Console.WriteLine(caList.Message);
             }
+
+            //Console.WriteLine("--------Car Delete--------");
+            //var caOpe2 = carManager.Delete(new Car { Id = 1008, BrandId = 14, ColorId = 2, DailyPrice = 350000, Description = "FFF3", ModelYear = 2021 });
+            //Console.WriteLine(caOpe2.Message);
+
             Console.WriteLine("--------Car Update--------");
-            carManager.Update(new Car { Id = 1007, BrandId = 14, ColorId = 2, DailyPrice = 32000, Description = "FFF2", ModelYear = 2021 });
+            var cOpe3 = carManager.Update(new Car { Id = 1007, BrandId = 14, ColorId = 2, DailyPrice = 32000, Description = "FFF2", ModelYear = 2021 });
+            Console.WriteLine(cOpe3.Message); 
+
             Console.WriteLine("--------GelAll After Update--------");
-            foreach (var car in carManager.GetAll())
+            var caList2 = carManager.GetAll();
+            if (caList2.Success)
             {
-                Console.WriteLine("ID: " + car.Id + " // MarkaId: " + car.BrandId + " // RenkId: " + car.ColorId + " // Fiyat: " + car.DailyPrice + " // Model: " + car.ModelYear + " // Açıklama: " + car.Description);
+                foreach (var car in caList2.Data)
+                {
+                    Console.WriteLine("ID: " + car.Id + " // MarkaId: " + car.BrandId + " // RenkId: " + car.ColorId + " // Fiyat: " + car.DailyPrice + " // Model: " + car.ModelYear + " // Açıklama: " + car.Description);
+                }
+                Console.WriteLine(caList2.Message);
             }
+            else
+            {
+                Console.WriteLine(caList2.Message);
+            }
+
             Console.WriteLine("--------GetAllByBrand--------");
-            foreach (var car in carManager.GetCarsByBrandId(13))
+            var caList3 = carManager.GetCarsByBrandId(13);
+            if (caList3.Success)
             {
-                Console.WriteLine("ID: " + car.Id + " // MarkaId: " + car.BrandId + " // RenkId: " + car.ColorId + " // Fiyat: " + car.DailyPrice + " // Model: " + car.ModelYear + " // Açıklama: " + car.Description);
+                foreach (var car in caList3.Data)
+                {
+                    Console.WriteLine("ID: " + car.Id + " // MarkaId: " + car.BrandId + " // RenkId: " + car.ColorId + " // Fiyat: " + car.DailyPrice + " // Model: " + car.ModelYear + " // Açıklama: " + car.Description);
+                }
+                Console.WriteLine(caList3.Message);
             }
+            else
+            {
+                Console.WriteLine(caList3.Message);
+            }
+
             Console.WriteLine("--------GetAllByColor--------");
-            foreach (var car in carManager.GetCarsByColorId(2))
+            var caList4 = carManager.GetCarsByColorId(2);
+            if (caList4.Success)
             {
-                Console.WriteLine("ID: " + car.Id + " // MarkaId: " + car.BrandId + " // RenkId: " + car.ColorId + " // Fiyat: " + car.DailyPrice + " // Model: " + car.ModelYear + " // Açıklama: " + car.Description);
+                foreach (var car in caList4.Data)
+                {
+                    Console.WriteLine("ID: " + car.Id + " // MarkaId: " + car.BrandId + " // RenkId: " + car.ColorId + " // Fiyat: " + car.DailyPrice + " // Model: " + car.ModelYear + " // Açıklama: " + car.Description);
+                }
+                Console.WriteLine(caList4.Message);
             }
-            Console.WriteLine("--------GetAllByCarDTO--------");
-            foreach (var car in carManager.GetCars())
+            else
             {
-                Console.WriteLine("ID: " + car.Id + " // MarkaId: " + car.BrandName + " // RenkId: " + car.ColorName + " // Fiyat: " + car.DailyPrice);
+                Console.WriteLine(caList4.Message);
+            }
+
+            Console.WriteLine("--------GetAllByCarDTO--------");
+            var caList5 = carManager.GetCars();
+            if (caList5.Success)
+            {
+                foreach (var car in caList5.Data)
+                {
+                    Console.WriteLine("ID: " + car.Id + " // MarkaId: " + car.BrandName + " // RenkId: " + car.ColorName + " // Fiyat: " + car.DailyPrice);
+                }
+                Console.WriteLine(caList5.Message);
+            }
+            else
+            {
+                Console.WriteLine(caList5.Message);
+            }
+
+            Console.WriteLine("--------GetById--------");
+            var caList6 = carManager.GetById(1007);
+            if (caList6.Success)
+            {
+                Console.WriteLine("ID: " + caList6.Data.Id + " // MarkaId: " + caList6.Data.BrandId + " // RenkId: " + caList6.Data.ColorId + " // Fiyat: " + caList6.Data.DailyPrice + " // Model: " + caList6.Data.ModelYear + " // Açıklama: " + caList6.Data.Description);
+                Console.WriteLine(caList6.Message);
+            }
+            else
+            {
+                Console.WriteLine(caList6.Message);
             }
         }
     }
