@@ -12,9 +12,51 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
-            BrandTest();
-            ColorTest();
-            CarTest();
+            //BrandTest();
+            //ColorTest();
+            //CarTest();
+
+            //UserTest();
+            //CustomerTest();
+
+            RentalTest();
+
+        }
+
+        private static void RentalTest()
+        {
+            RentalManager rentalManager = new RentalManager(new EfRentalDal());
+            Console.WriteLine("--------Rental Add Success--------");
+            var rOpe = rentalManager.Add(new Rental { CarId = 2002, CustomerId = 1, RentDate = DateTime.Now, ReturnDate = null });
+            Console.WriteLine(rOpe.Message);
+
+            Console.WriteLine("--------Rental Add Failed--------");
+            var rOpe2 = rentalManager.Add(new Rental { CarId = 2002, CustomerId = 1, RentDate = DateTime.Now, ReturnDate = null });
+            Console.WriteLine(rOpe2.Message);
+
+            Console.WriteLine("--------Rental Update--------");
+            var rOpe3 = rentalManager.Update(new Rental { CarId = 2002, CustomerId = 1, RentDate = DateTime.Now, ReturnDate = DateTime.Now });
+            Console.WriteLine(rOpe3.Message);
+
+            Console.WriteLine("--------Rental Add Again Success--------");
+            var rOpe4 = rentalManager.Add(new Rental { CarId = 2002, CustomerId = 1, RentDate = DateTime.Now, ReturnDate = null });
+            Console.WriteLine(rOpe4.Message);
+        }
+
+        private static void CustomerTest()
+        {
+            CustomerManager customerManager = new CustomerManager(new EfCustomerDal());
+            Console.WriteLine("--------Customer Add--------");
+            var cuOpe = customerManager.Add(new Customer { UserId = 1, CompanyName = "Cenasis Yazılım" });
+            Console.WriteLine(cuOpe.Message);
+        }
+
+        private static void UserTest()
+        {
+            UserManager userManager = new UserManager(new EfUserDal());
+            Console.WriteLine("--------User Add--------");
+            var uOpe = userManager.Add(new User { FirstName = "Kerim", LastName = "Dinçer", Email = "kerim_dincer@hotmail.com", Password = "12345" });
+            Console.WriteLine(uOpe.Message);
         }
 
         private static void ColorTest()
