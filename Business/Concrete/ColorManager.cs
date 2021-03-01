@@ -1,5 +1,7 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrete;
 using DataAccess.Abstract;
@@ -11,6 +13,7 @@ using System.Text;
 
 namespace Business.Concrete
 {
+    [ValidationAspect(typeof(MaintenanceValidator<Color>))]
     public class ColorManager : IColorService
     {
         IColorDal _colorDal;
@@ -19,68 +22,34 @@ namespace Business.Concrete
         {
             _colorDal = colorDal;
         }
-
+        [ValidationAspect(typeof(ColorValidator))]
         public IResult Add(Color entity)
         {
-            if (DateTime.Now.Hour == Maintenance.Hour)
-            {
-                return new ErrorResult(Messages.OperationFailed);
-            }
-            else
-            {
-                _colorDal.Add(entity);
-                return new SuccessResult(Messages.ColorAdded);
-            }
+            _colorDal.Add(entity);
+            return new SuccessResult(Messages.ColorAdded);
         }
-
+        [ValidationAspect(typeof(ColorValidator))]
         public IResult Delete(Color entity)
         {
-            if (DateTime.Now.Hour == Maintenance.Hour)
-            {
-                return new ErrorResult(Messages.OperationFailed);
-            }
-            else
-            {
-                _colorDal.Delete(entity);
-                return new SuccessResult(Messages.ColorDeleted);
-            }
+            _colorDal.Delete(entity);
+            return new SuccessResult(Messages.ColorDeleted);
         }
 
         public IDataResult<List<Color>> GetAll()
         {
-            if (DateTime.Now.Hour == Maintenance.Hour)
-            {
-                return new ErrorDataResult<List<Color>>(Messages.OperationFailed);
-            }
-            else
-            {
-                return new SuccessDataResult<List<Color>>(_colorDal.GetAll(),Messages.BrandsListed);
-            }
+            return new SuccessDataResult<List<Color>>(_colorDal.GetAll(),Messages.BrandsListed);
         }
 
         public IDataResult<Color> GetById(int Id)
-        {
-            if (DateTime.Now.Hour == Maintenance.Hour)
-            {
-                return new ErrorDataResult<Color>(Messages.OperationFailed);
-            }
-            else
-            {
-                return new SuccessDataResult<Color>(_colorDal.Get(p => p.ColorId == Id),Messages.ColorsListed);
-            }
+        { 
+            return new SuccessDataResult<Color>(_colorDal.Get(p => p.ColorId == Id),Messages.ColorsListed);
         }
 
+        [ValidationAspect(typeof(ColorValidator))]
         public IResult Update(Color entity)
         {
-            if (DateTime.Now.Hour == Maintenance.Hour)
-            {
-                return new ErrorResult(Messages.OperationFailed);
-            }
-            else
-            {
-                _colorDal.Update(entity);
-                return new SuccessResult(Messages.ColorUpdated);
-            }
+            _colorDal.Update(entity);
+            return new SuccessResult(Messages.ColorUpdated);
         }
     }
 }

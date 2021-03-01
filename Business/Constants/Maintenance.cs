@@ -6,6 +6,6 @@ namespace Business.Constants
 {
     public class Maintenance
     {
-        public static int Hour = 15;
+        public static int Hour = 12;
     }
 }

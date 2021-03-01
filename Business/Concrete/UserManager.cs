@@ -1,5 +1,7 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrete;
 using DataAccess.Abstract;
@@ -10,6 +12,7 @@ using System.Text;
 
 namespace Business.Concrete
 {
+    [ValidationAspect(typeof(MaintenanceValidator<User>))]
     public class UserManager : IUserService
     {
         IUserDal _userDal;
@@ -18,67 +21,33 @@ namespace Business.Concrete
         {
             _userDal = userDal;
         }
+        [ValidationAspect(typeof(UserValidator))]
         public IResult Add(User entity)
         {
-            if (DateTime.Now.Hour == Maintenance.Hour)
-            {
-                return new ErrorResult(Messages.OperationFailed);
-            }
-            else
-            {
-                _userDal.Add(entity);
-                return new SuccessResult(Messages.UserAdded);
-            }
+            _userDal.Add(entity);
+            return new SuccessResult(Messages.UserAdded);
         }
-
+        [ValidationAspect(typeof(UserValidator))]
         public IResult Delete(User entity)
         {
-            if (DateTime.Now.Hour == Maintenance.Hour)
-            {
-                return new ErrorResult(Messages.OperationFailed);
-            }
-            else
-            {
-                _userDal.Delete(entity);
-                return new SuccessResult(Messages.UserDeleted);
-            }
+            _userDal.Delete(entity);
+            return new SuccessResult(Messages.UserDeleted);
         }
 
         public IDataResult<List<User>> GetAll()
         {
-            if (DateTime.Now.Hour == Maintenance.Hour)
-            {
-                return new ErrorDataResult<List<User>>(Messages.OperationFailed);
-            }
-            else
-            {
-                return new SuccessDataResult<List<User>>(_userDal.GetAll(), Messages.UsersListed);
-            }
+            return new SuccessDataResult<List<User>>(_userDal.GetAll(), Messages.UsersListed);
         }
 
         public IDataResult<User> GetById(int Id)
         {
-            if (DateTime.Now.Hour == Maintenance.Hour)
-            {
-                return new ErrorDataResult<User>(Messages.OperationFailed);
-            }
-            else
-            {
-                return new SuccessDataResult<User>(_userDal.Get(p => p.Id == Id), Messages.UserListed);
-            }
+            return new SuccessDataResult<User>(_userDal.Get(p => p.Id == Id), Messages.UserListed);
         }
-
+        [ValidationAspect(typeof(UserValidator))]
         public IResult Update(User entity)
         {
-            if (DateTime.Now.Hour == Maintenance.Hour)
-            {
-                return new ErrorResult(Messages.OperationFailed);
-            }
-            else
-            {
-                _userDal.Update(entity);
-                return new SuccessResult(Messages.UserUpdated);
-            }
+            _userDal.Update(entity);
+            return new SuccessResult(Messages.UserUpdated);
         }
     }
 }

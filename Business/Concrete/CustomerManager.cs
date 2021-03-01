@@ -1,5 +1,7 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrete;
 using DataAccess.Abstract;
@@ -10,6 +12,7 @@ using System.Text;
 
 namespace Business.Concrete
 {
+    [ValidationAspect(typeof(MaintenanceValidator<Customer>))]
     public class CustomerManager : ICustomerService
     {
         ICustomerDal _customerDal;
@@ -18,67 +21,33 @@ namespace Business.Concrete
         {
             _customerDal = customerDal;
         }
+        [ValidationAspect(typeof(CustomerValidator))]
         public IResult Add(Customer entity)
         {
-            if(DateTime.Now.Hour == Maintenance.Hour)
-            {
-                return new ErrorResult(Messages.OperationFailed);
-            }
-            else
-            {
-                _customerDal.Add(entity);
-                return new SuccessResult(Messages.CustomerAdded);
-            }
+            _customerDal.Add(entity);
+            return new SuccessResult(Messages.CustomerAdded);
         }
-
+        [ValidationAspect(typeof(CustomerValidator))]
         public IResult Delete(Customer entity)
         {
-            if (DateTime.Now.Hour == Maintenance.Hour)
-            {
-                return new ErrorResult(Messages.OperationFailed);
-            }
-            else
-            {
-                _customerDal.Delete(entity);
-                return new SuccessResult(Messages.CustomerDeleted);
-            }
+        _customerDal.Delete(entity);
+        return new SuccessResult(Messages.CustomerDeleted);
         }
 
         public IDataResult<List<Customer>> GetAll()
         {
-            if (DateTime.Now.Hour == Maintenance.Hour)
-            {
-                return new ErrorDataResult<List<Customer>>(Messages.OperationFailed);
-            }
-            else
-            {
-                return new SuccessDataResult<List<Customer>>(_customerDal.GetAll(), Messages.CustomersListed);
-            }
+            return new SuccessDataResult<List<Customer>>(_customerDal.GetAll(), Messages.CustomersListed);
         }
 
         public IDataResult<Customer> GetById(int Id)
         {
-            if (DateTime.Now.Hour == Maintenance.Hour)
-            {
-                return new ErrorDataResult<Customer>(Messages.OperationFailed);
-            }
-            else
-            {
-                return new SuccessDataResult<Customer>(_customerDal.Get(p => p.UserId == Id), Messages.CustomerListed);
-            }
+            return new SuccessDataResult<Customer>(_customerDal.Get(p => p.UserId == Id), Messages.CustomerListed);
         }
-
+        [ValidationAspect(typeof(CustomerValidator))]
         public IResult Update(Customer entity)
         {
-            if (DateTime.Now.Hour == Maintenance.Hour)
-            {
-                return new ErrorResult(Messages.OperationFailed);
-            }
-            else
-            {
-                _customerDal.Update(entity);
-                return new SuccessResult(Messages.CustomerUpdated);
-            }
+            _customerDal.Update(entity);
+            return new SuccessResult(Messages.CustomerUpdated);
         }
     }
 }
