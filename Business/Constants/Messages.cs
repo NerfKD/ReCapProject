@@ -40,5 +40,12 @@ namespace Business.Constants
 
         public static string OperationFailed = "İşlem başarısız, sistem bakımda";
 
+        public static string CarImageAdded = "Araç resmi eklendi.";
+        public static string CarImageDeleted = "Araç resmi silindi";
+        public static string CarImageUpdate = "Araç resmi güncellendi.";
+        public static string CarsImagesListed = "Araç resimleri listelendi.";
+        public static string CarImagesListed = "Aracın resimleri listelendi.";
+        public static string CarImageListed = "Resim listelendi.";
+        public static string CarImageLimitExceeded = "Araç resim limiti aşılmıştır.";
     }
 }
