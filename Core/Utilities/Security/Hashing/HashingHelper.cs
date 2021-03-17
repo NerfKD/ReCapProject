@@ -18,7 +18,6 @@ namespace Core.Utilities.Security.Hashing
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
             {
-                var none = hmac.Key;
                 var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
 
                 for (int i = 0; i < computedHash.Length; i++)
