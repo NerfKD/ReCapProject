@@ -9,7 +9,7 @@ namespace Business.ValidationRules.FluentValidation
     {
         public RentalValidator()
         {
-            RuleFor(p => DateTime.Now.Hour).NotEqual(Maintenance.Hour).WithMessage(Messages.OperationFailed);
+
             RuleFor(p => p.CarId).NotEmpty();
             RuleFor(p => p.CustomerId).NotEmpty();
             RuleFor(p => p.RentDate).NotEmpty();

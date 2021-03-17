@@ -9,7 +9,7 @@ namespace Business.ValidationRules.FluentValidation
     {
         public CustomerValidator()
         {
-            RuleFor(p => DateTime.Now.Hour).NotEqual(Maintenance.Hour).WithMessage(Messages.OperationFailed);
+           
             RuleFor(p => p.UserId).NotEmpty();
             RuleFor(p => p.CompanyName).NotEmpty();
             RuleFor(p => p.CompanyName).MaximumLength(50);
