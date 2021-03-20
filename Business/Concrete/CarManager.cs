@@ -1,7 +1,11 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Validation;
+using Core.Aspects.Caching;
+using Core.Aspects.Performance;
+using Core.Aspects.Transaction;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrete;
 using DataAccess.Abstract;
@@ -24,30 +28,39 @@ namespace Business.Concrete
         {
             _carDal = carDal;
         }
-
+        [SecuredOperation("car.add,admin")]
         [ValidationAspect(typeof(CarValidator))]
+        [CacheRemoveAspect("ICarService.Get")]
         public IResult Add(Car entity)
         {
             _carDal.Add(entity);
             return new SuccessResult(Messages.CarAdded);
         }
+        [SecuredOperation("car.delete,admin")]
         [ValidationAspect(typeof(CarValidator))]
+        [CacheRemoveAspect("ICarService.Get")]
         public IResult Delete(Car entity)
         {
             _carDal.Delete(entity);
             return new SuccessResult(Messages.CarDeleted);
         }
+        [SecuredOperation("car.update,admin")]
         [ValidationAspect(typeof(CarValidator))]
+        [CacheRemoveAspect("ICarService.Get")]
         public IResult Update(Car entity)
         {
             _carDal.Update(entity);
             return new SuccessResult(Messages.CarUpdated);
         }
+        [SecuredOperation("car.list,admin")]
+        [CacheAspect]
         public IDataResult<Car> GetById(int Id)
         {  
             return new SuccessDataResult<Car>(_carDal.Get(p => p.Id == Id), Messages.CarListed);
         }
-
+        [SecuredOperation("car.list,admin")]
+        [CacheAspect]
+        [PerformanceAspect(1)]
         public IDataResult<List<Car>> GetAll()
         {
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(), Messages.CarsListed);
@@ -67,6 +80,17 @@ namespace Business.Concrete
         public IDataResult<List<CarDto>> GetCars()
         {
             return new SuccessDataResult<List<CarDto>>(_carDal.GetCars(), Messages.CarsListed);
+        }
+        [TransactionScopeAspect]
+        public IResult AddTransactionalTest(Car car)
+        {
+            _carDal.Add(car);
+            if (car.DailyPrice > 10)
+            {
+                throw new Exception("Rollback");
+            }
+            _carDal.Add(car);
+            return null;
         }
     }
 }
