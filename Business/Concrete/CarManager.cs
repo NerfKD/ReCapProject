@@ -60,7 +60,7 @@ namespace Business.Concrete
         }
         [SecuredOperation("car.list,admin")]
         [CacheAspect]
-        [PerformanceAspect(1)]
+        [PerformanceAspect(10)]
         public IDataResult<List<Car>> GetAll()
         {
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(), Messages.CarsListed);
