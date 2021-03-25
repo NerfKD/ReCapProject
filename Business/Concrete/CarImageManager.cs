@@ -33,8 +33,9 @@ namespace Business.Concrete
             {
                 return result;
             }
-
-            entity.ImagePath = FileHelper.Add(file);
+            var fileResult = FileHelper.Add(file);
+            entity.ImageId = fileResult.Split(',')[1];
+            entity.ImagePath = fileResult.Split(',')[0];
             entity.Date = DateTime.Now;
             _carImageDal.Add(entity);
             return new SuccessResult(Messages.CarImageAdded);
@@ -84,11 +85,11 @@ namespace Business.Concrete
         }
         private List<CarImage> CheckIfCarImageNull(int carId)
         {
-            string path = @"\Images\default.jpg";
+            string path = @"\wwwroot\uploads\default.jpg";
             var result = _carImageDal.GetAll(c => c.CarId == carId).Any();
             if (!result)
             {
-                return new List<CarImage> { new CarImage { CarId = carId, ImagePath = path, Date = DateTime.Now } };
+                return new List<CarImage> { new CarImage { CarId = carId, ImageId = "default.jpg", ImagePath = path, Date = DateTime.Now } };
             }
             return _carImageDal.GetAll(p => p.CarId == carId);
         }

@@ -10,5 +10,7 @@ namespace DataAccess.Abstract
     public interface ICarDal : IEntityRepository<Car>
     {
         List<CarDto> GetCars();
+        List<CarDto> GetCarsByBrand(int brandId);
+        List<CarDto> GetCarsByColor(int colorId);
     }
 }

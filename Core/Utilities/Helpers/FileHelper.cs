@@ -20,9 +20,11 @@ namespace Core.Utilities.Helpers
                     file.CopyTo(stream);
                 }
             }
-            var result = newPath(file);
+            var resultbase = newPath(file);
+            var result = resultbase.Split(',')[0];
+            var resultGuid = resultbase.Split(',')[1];
             File.Move(sourcepath, result);
-            return result;
+            return result + "," + resultGuid;
         }
         public static IResult Delete(string path)
         {
@@ -55,11 +57,11 @@ namespace Core.Utilities.Helpers
             FileInfo ff = new FileInfo(file.FileName);
             string fileExtension = ff.Extension;
 
-            string path = Environment.CurrentDirectory + @"\Images\Cars";
+            string path = Environment.CurrentDirectory + @"\wwwroot\uploads";
             var newPath = Guid.NewGuid().ToString() + "_" + DateTime.Now.Month + "_" + DateTime.Now.Day + "_" + DateTime.Now.Year + fileExtension;
 
             string result = $@"{path}\{newPath}";
-            return result;
+            return result + "," + newPath;
         }
     }
 }
