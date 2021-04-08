@@ -54,11 +54,14 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(), Messages.RentalsListed);
         }
 
-        public IDataResult<List<RentalDto>> GetAllByCarId(int carId)
+        public IDataResult<List<Rental>> GetAllByCarId(int carId)
         {
-            return new SuccessDataResult<List<RentalDto>>(_rentalDal.GetAllByCarId(carId), Messages.RentalsListed);
+            return new SuccessDataResult<List<Rental>>(_rentalDal.GetAllByCarId(carId), Messages.RentalsListed);
         }
-
+        public IDataResult<List<RentalDto>> GetAllDtoByCarId(int carId)
+        {
+            return new SuccessDataResult<List<RentalDto>>(_rentalDal.GetAllDtoByCarId(carId), Messages.RentalsListed);
+        }
         public IDataResult<Rental> GetById(int Id)
         {
             return new SuccessDataResult<Rental>(_rentalDal.Get(p => p.Id == Id), Messages.RentalListed);
@@ -91,17 +94,17 @@ namespace Business.Concrete
         }
 
 
-        public IResult CheckRentalDate(RentalDto entity)
+        public IResult CheckRentalDate(Rental entity)
         {
             if (entity.RentDate < DateTime.Now || entity.ReturnDate < DateTime.Now)
             {
                 return new ErrorResult(Messages.DateTimeNowError);
             }
 
-            List<RentalDto> carRentals = _rentalDal.GetAllByCarId(entity.CarId);
+            List<Rental> carRentals = _rentalDal.GetAllByCarId(entity.CarId);
             if (carRentals != null)
             {
-                foreach (RentalDto rental in carRentals)
+                foreach (Rental rental in carRentals)
                 {
                     if (entity.RentDate >= rental.RentDate && entity.RentDate <= rental.ReturnDate)
                     {

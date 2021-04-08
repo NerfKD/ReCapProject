@@ -9,9 +9,11 @@ namespace DataAccess.Abstract
 {
     public interface IRentalDal : IEntityRepository<Rental>
     {
+
         Rental GetLastRental(int id);
         List<RentalDto> GetRentals();
-        List<RentalDto> GetAllByCarId(int carId);
+        List<Rental> GetAllByCarId(int carId);
+        List<RentalDto> GetAllDtoByCarId(int carId);
 
     }
 }

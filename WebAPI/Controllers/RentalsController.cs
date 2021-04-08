@@ -44,7 +44,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("checkrentaldate")]
-        public IActionResult CheckRentalDate(RentalDto rental)
+        public IActionResult CheckRentalDate(Rental rental)
         {
             var result = _rentalService.CheckRentalDate(rental);
             if (result.Success)
@@ -59,6 +59,17 @@ namespace WebAPI.Controllers
         public IActionResult GetAllByCarId(int carId)
         {
             var result = _rentalService.GetAllByCarId(carId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpGet("getalldtobycarid")]
+        public IActionResult GetAllDtoByCarId(int carId)
+        {
+            var result = _rentalService.GetAllDtoByCarId(carId);
             if (result.Success)
             {
                 return Ok(result);

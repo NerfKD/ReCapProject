@@ -9,9 +9,28 @@ using System.Text;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EfRentalDal : EfEntityRepositoryBase <Rental, CBCContext>, IRentalDal
+    public class EfRentalDal : EfEntityRepositoryBase<Rental, CBCContext>, IRentalDal
     {
-        public List<RentalDto> GetAllByCarId(int carId)
+        public List<Rental> GetAllByCarId(int carId)
+        {
+            using (CBCContext context = new CBCContext())
+            {
+                var result = from re in context.Rentals
+                             where re.CarId == carId
+                             select new Rental
+                             {
+                                 Id = re.Id,
+                                 CarId = re.CarId,
+                                 CustomerId = re.CustomerId,
+                                 RentDate = re.RentDate,
+                                 ReturnDate = re.ReturnDate
+                             };
+                return result.ToList();
+            }
+        }
+
+
+        public List<RentalDto> GetAllDtoByCarId(int carId)
         {
             using (CBCContext context = new CBCContext())
             {
@@ -39,7 +58,7 @@ namespace DataAccess.Concrete.EntityFramework
         {
             using (CBCContext context = new CBCContext())
             {
-                var result = context.Set<Rental>().Where(p=> p.CarId == id).OrderByDescending(x=> x.Id).FirstOrDefault();
+                var result = context.Set<Rental>().Where(p => p.CarId == id).OrderByDescending(x => x.Id).FirstOrDefault();
 
                 return result;
             }
