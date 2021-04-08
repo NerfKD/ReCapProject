@@ -20,11 +20,9 @@ namespace Core.Utilities.Helpers
                     file.CopyTo(stream);
                 }
             }
-            var resultbase = newPath(file);
-            var result = resultbase.Split(',')[0];
-            var resultGuid = resultbase.Split(',')[1];
+            var result = newPath(file);
             File.Move(sourcepath, result);
-            return result + "," + resultGuid;
+            return result;
         }
         public static IResult Delete(string path)
         {
@@ -61,7 +59,7 @@ namespace Core.Utilities.Helpers
             var newPath = Guid.NewGuid().ToString() + "_" + DateTime.Now.Month + "_" + DateTime.Now.Day + "_" + DateTime.Now.Year + fileExtension;
 
             string result = $@"{path}\{newPath}";
-            return result + "," + newPath;
+            return result;
         }
     }
 }

@@ -8,9 +8,11 @@ namespace Entities.DTO
     public class RentalDto :IDto
     {
         public int Id { get; set; }
+        public int CarId { get; set; }
         public string CarName { get; set; }
+        public int CustomerId { get; set; }
         public string FullName { get; set; }
         public DateTime RentDate { get; set; }
-        public Nullable<DateTime> ReturnDate { get; set; }
+        public DateTime ReturnDate { get; set; }
     }
 }

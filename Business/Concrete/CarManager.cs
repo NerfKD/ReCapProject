@@ -52,8 +52,8 @@ namespace Business.Concrete
             _carDal.Update(entity);
             return new SuccessResult(Messages.CarUpdated);
         }
-        [SecuredOperation("car.list,admin")]
-        [CacheAspect]
+        //[SecuredOperation("car.list,admin")]
+        //[CacheAspect]
         public IDataResult<Car> GetById(int Id)
         {  
             return new SuccessDataResult<Car>(_carDal.Get(p => p.Id == Id), Messages.CarListed);
@@ -91,6 +91,11 @@ namespace Business.Concrete
             }
             _carDal.Add(car);
             return null;
+        }
+
+        public IDataResult<CarDto> GetCarById(int id)
+        {
+            return new SuccessDataResult<CarDto>(_carDal.GetCarById(id), Messages.CarListed);
         }
     }
 }

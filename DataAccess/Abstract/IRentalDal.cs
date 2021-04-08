@@ -11,5 +11,7 @@ namespace DataAccess.Abstract
     {
         Rental GetLastRental(int id);
         List<RentalDto> GetRentals();
+        List<RentalDto> GetAllByCarId(int carId);
+
     }
 }

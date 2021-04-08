@@ -1,7 +1,9 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Business.ServiceAdapters;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Validation;
+using Core.Utilities.Business;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrete;
 using DataAccess.Abstract;
@@ -17,33 +19,29 @@ namespace Business.Concrete
     public class RentalManager : IRentalService
     {
         IRentalDal _rentalDal;
-        public RentalManager(IRentalDal rentalDal)
+        ICreditCardService _creditCardService;
+        public RentalManager(IRentalDal rentalDal, ICreditCardService creditCardService)
         {
             _rentalDal = rentalDal;
+            _creditCardService = creditCardService;
         }
         [ValidationAspect(typeof(RentalValidator))]
         public IResult Add(Rental entity)
         {
-            var rentedCar = _rentalDal.GetLastRental(entity.CarId);
-            if (rentedCar != null)
-            { 
-                if (rentedCar.ReturnDate != null)
-                {
-                    _rentalDal.Add(entity);
-                    return new SuccessResult(Messages.RentalAdded);
-                }
-                else
-                {
-                    return new ErrorResult(Messages.RentalFailed);
-                }
-                
-            }
-            else
-            {
-                _rentalDal.Add(entity);
-                return new SuccessResult(Messages.RentalAdded);
-            }
+            _rentalDal.Add(entity);
+            return new SuccessResult(Messages.RentalAdded);
         }
+
+        public IResult RentWithCreditCard(RentWithCreditCard rentWithCreditCard)
+        {
+            if (_creditCardService.ValidatePayment(rentWithCreditCard))
+            {
+                _rentalDal.Add(rentWithCreditCard.Rental);
+                return new SuccessResult(Messages.PaymentSuccess);
+            }
+            return new ErrorResult(Messages.PaymentUnsuccessful);
+        }
+
         [ValidationAspect(typeof(RentalValidator))]
         public IResult Delete(Rental entity)
         {
@@ -54,6 +52,11 @@ namespace Business.Concrete
         public IDataResult<List<Rental>> GetAll()
         {
             return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(), Messages.RentalsListed);
+        }
+
+        public IDataResult<List<RentalDto>> GetAllByCarId(int carId)
+        {
+            return new SuccessDataResult<List<RentalDto>>(_rentalDal.GetAllByCarId(carId), Messages.RentalsListed);
         }
 
         public IDataResult<Rental> GetById(int Id)
@@ -75,16 +78,44 @@ namespace Business.Concrete
         public IResult Update(Rental entity)
         {
             var rentedCar = _rentalDal.GetLastRental(entity.CarId);
-            if (rentedCar.ReturnDate != null && rentedCar == null)
+            if (rentedCar == null)
             {
                 return new ErrorResult(Messages.OperationFailed);
             }
             else
             {
-                rentedCar.ReturnDate = DateTime.Now;
+                rentedCar.ReturnDate = entity.ReturnDate;
                 _rentalDal.Update(rentedCar);
                 return new SuccessResult(Messages.RentalUpdated);
             }
         }
+
+
+        public IResult CheckRentalDate(RentalDto entity)
+        {
+            if (entity.RentDate < DateTime.Now || entity.ReturnDate < DateTime.Now)
+            {
+                return new ErrorResult(Messages.DateTimeNowError);
+            }
+
+            List<RentalDto> carRentals = _rentalDal.GetAllByCarId(entity.CarId);
+            if (carRentals != null)
+            {
+                foreach (RentalDto rental in carRentals)
+                {
+                    if (entity.RentDate >= rental.RentDate && entity.RentDate <= rental.ReturnDate)
+                    {
+                        return new ErrorResult(Messages.RentDateError);
+                    }
+                    else if (entity.ReturnDate >= rental.RentDate && entity.ReturnDate <= rental.ReturnDate)
+                    {
+                        return new ErrorResult(Messages.ReturnDateError);
+                    }
+                }
+            }
+            return new SuccessResult(Messages.RentalValid);
+        }
+
+
     }
 }

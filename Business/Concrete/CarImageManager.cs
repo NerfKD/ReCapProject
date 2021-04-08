@@ -34,8 +34,10 @@ namespace Business.Concrete
                 return result;
             }
             var fileResult = FileHelper.Add(file);
-            entity.ImageId = fileResult.Split(',')[1];
-            entity.ImagePath = fileResult.Split(',')[0];
+            int foundIndex = fileResult.IndexOf(@"wwwroot");
+            
+            entity.ImageId = fileResult.Substring(foundIndex + 7).Replace(@"\","/");
+            entity.ImagePath = fileResult;
             entity.Date = DateTime.Now;
             _carImageDal.Add(entity);
             return new SuccessResult(Messages.CarImageAdded);
@@ -85,11 +87,11 @@ namespace Business.Concrete
         }
         private List<CarImage> CheckIfCarImageNull(int carId)
         {
-            string path = @"\wwwroot\uploads\default.jpg";
+            string path = @"C:\Users\KD\source\repos\ReCapProject\WebAPI\wwwroot\uploads\default.jpg";
             var result = _carImageDal.GetAll(c => c.CarId == carId).Any();
             if (!result)
             {
-                return new List<CarImage> { new CarImage { CarId = carId, ImageId = "default.jpg", ImagePath = path, Date = DateTime.Now } };
+                return new List<CarImage> { new CarImage { CarId = carId, ImageId = "/uploads/default.jpg", ImagePath = path, Date = DateTime.Now } };
             }
             return _carImageDal.GetAll(p => p.CarId == carId);
         }

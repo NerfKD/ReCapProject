@@ -16,5 +16,10 @@ namespace Business.Abstract
         IResult Delete(Rental rental);
         IDataResult<Rental> GetLastRental(int carId);
         IDataResult<List<RentalDto>> GetRentals();
+
+        IDataResult<List<RentalDto>> GetAllByCarId(int carId);
+        IResult RentWithCreditCard(RentWithCreditCard rentWithCreditCard);
+
+        IResult CheckRentalDate(RentalDto rental);
     }
 }

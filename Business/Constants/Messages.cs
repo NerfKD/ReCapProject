@@ -38,6 +38,10 @@ namespace Business.Constants
         public static string RentalsListed = "Kiralamalar listelendi";
         public static string RentalListed = "Kiralama listelendi";
         public static string RentalFailed = "Araç teslim edilmemiş, kiralanamaz";
+        public static string DateTimeNowError = "Kiralama tarihleri mevcut gün ve saatten büyük olmalı.";
+        public static string RentDateError = "Kiralama tarihi rezerve edilmiş.";
+        public static string ReturnDateError = "Teslim tarihi rezerve edilmiş.";
+        public static string RentalValid = "Kiralama geçerli.";
 
         public static string OperationFailed = "İşlem başarısız, sistem bakımda";
 
@@ -58,5 +62,8 @@ namespace Business.Constants
         public static string AccessTokenCreated = "Token oluşturuldu.";
         public static string ClaimsListed = "Roller Listelendi.";
         public static string MailListed = "Mail listelendi.";
+
+        public static string PaymentSuccess = "Ödeme başarılı.";
+        public static string PaymentUnsuccessful = "Ödeme başarısız.";
     }
 }
