@@ -65,5 +65,13 @@ namespace Business.Constants
 
         public static string PaymentSuccess = "Ödeme başarılı.";
         public static string PaymentUnsuccessful = "Ödeme başarısız.";
+
+        public static string FindeksPointPositive = "Olumlu Findeks sonucu";
+        public static string FindeksPointNegative = "Olumsuz Findeks sonucu";
+
+        public static string CardAdded = "Kart eklendi.";
+        public static string CardDeleted = "Kart silindi.";
+        public static string CardsListed = "Kartlar listelendi.";
+        public static string CardListed = "Kart listelendi.";
     }
 }

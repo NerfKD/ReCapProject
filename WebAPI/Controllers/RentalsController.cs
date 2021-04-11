@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Core.Entities.Concrete;
 using Entities.Concrete;
 using Entities.DTO;
 using Microsoft.AspNetCore.Http;
@@ -47,6 +48,18 @@ namespace WebAPI.Controllers
         public IActionResult CheckRentalDate(Rental rental)
         {
             var result = _rentalService.CheckRentalDate(rental);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+
+        }
+
+        [HttpPost("checkuserfindeks")]
+        public IActionResult CheckUserFindeks(Rental rental)
+        {
+            var result = _rentalService.CheckUserFindeks(rental);
             if (result.Success)
             {
                 return Ok(result);

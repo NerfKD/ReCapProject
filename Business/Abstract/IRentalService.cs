@@ -1,4 +1,5 @@
-﻿using Core.Utilities.Results.Abstract;
+﻿using Core.Entities.Concrete;
+using Core.Utilities.Results.Abstract;
 using Entities.Concrete;
 using Entities.DTO;
 using System;
@@ -16,12 +17,10 @@ namespace Business.Abstract
         IResult Delete(Rental rental);
         IDataResult<Rental> GetLastRental(int carId);
         IDataResult<List<RentalDto>> GetRentals();
-
         IDataResult<List<Rental>> GetAllByCarId(int carId);
         IDataResult<List<RentalDto>> GetAllDtoByCarId(int carId);
-        
         IResult RentWithCreditCard(RentWithCreditCard rentWithCreditCard);
-
         IResult CheckRentalDate(Rental rental);
+        IResult CheckUserFindeks(Rental rental);
     }
 }

@@ -1,8 +1,10 @@
 ﻿using Business.Abstract;
 using Business.Constants;
 using Business.ServiceAdapters;
+using Business.ServiceAdapters.Findeks;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Validation;
+using Core.Entities.Concrete;
 using Core.Utilities.Business;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrete;
@@ -19,11 +21,17 @@ namespace Business.Concrete
     public class RentalManager : IRentalService
     {
         IRentalDal _rentalDal;
+        IUserService _userService;
+        ICarService _carService;
         ICreditCardService _creditCardService;
-        public RentalManager(IRentalDal rentalDal, ICreditCardService creditCardService)
+        IFindeksService _findeksService;
+        public RentalManager(IRentalDal rentalDal, ICreditCardService creditCardService, IFindeksService findeksService, IUserService userService, ICarService carService)
         {
             _rentalDal = rentalDal;
             _creditCardService = creditCardService;
+            _findeksService = findeksService;
+            _userService = userService;
+            _carService = carService;
         }
         [ValidationAspect(typeof(RentalValidator))]
         public IResult Add(Rental entity)
@@ -119,6 +127,16 @@ namespace Business.Concrete
             return new SuccessResult(Messages.RentalValid);
         }
 
+        public IResult CheckUserFindeks(Rental rental)
+        {
+            var car = _carService.GetById(rental.CarId).Data;
+            var user = _userService.GetById(rental.CustomerId).Data;
 
+            if (_findeksService.ValidateFindeks(car, user))
+            {
+                return new SuccessResult(Messages.FindeksPointPositive);
+            }
+            return new ErrorResult(Messages.FindeksPointNegative);
+        }
     }
 }
